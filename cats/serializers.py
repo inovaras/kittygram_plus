@@ -1,7 +1,7 @@
 import datetime as dt
 import webcolors
 
-from .models import Cat, Owner, Achievement, AchievementCat
+from .models import Cat, Owner, Achievement, AchievementCat, CHOICES
 from rest_framework import serializers
 
 
@@ -24,11 +24,18 @@ class AchievementSerializer(serializers.ModelSerializer):
         fields = ('id', 'achievement_name')
 
 
+class CatListSerializer(serializers.ModelSerializer):
+    color = serializers.ChoiceField(choices=CHOICES)
+
+    class Meta:
+        model = Cat
+        fields = ('id', 'name', 'color')
+
 class CatSerializer(serializers.ModelSerializer):
     # owner = serializers.PrimaryKeyRelatedField(read_only=True)
     achievements = AchievementSerializer(many=True, required=False)
     age = serializers.SerializerMethodField()
-    color = Hex2NameColor()
+    color = serializers.ChoiceField(choices=CHOICES)
 
     class Meta:
         model = Cat

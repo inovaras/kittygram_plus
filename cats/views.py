@@ -1,5 +1,6 @@
 from rest_framework import viewsets
-
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from .models import Cat, Owner, Achievement
 from .serializers import CatSerializer, OwnerSerializer, AchievementSerializer
 
@@ -7,6 +8,12 @@ from .serializers import CatSerializer, OwnerSerializer, AchievementSerializer
 class CatViewSet(viewsets.ModelViewSet):
     queryset = Cat.objects.all()
     serializer_class = CatSerializer
+
+    @action(detail=False, url_path='recent-black-cats')
+    def recent_black_cats(self, requests):
+        cats = Cat.objects.filter(color='Black')[:5]
+        serializer = self.get_serializer(cats, many=True)
+        return Response(serializer.data)
 
 
 class OwnerViewSet(viewsets.ModelViewSet):
