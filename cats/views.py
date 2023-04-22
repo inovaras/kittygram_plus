@@ -1,9 +1,24 @@
 from rest_framework import viewsets
+from rest_framework import mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Cat, Owner, Achievement
 from .serializers import OwnerSerializer, AchievementSerializer
 from .serializers import CatSerializer, CatListSerializer
+
+
+class UpdateDeleteViewSet(mixins.UpdateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+    pass
+
+
+class CreateRetrieveViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin,
+                            viewsets.GenericViewSet):
+    pass
+
+
+class LightCatViewSet(CreateRetrieveViewSet):
+    queryset = Cat.objects.all()
+    serializer_class = CatSerializer
 
 
 class CatViewSet(viewsets.ModelViewSet):
