@@ -31,6 +31,7 @@ class CatListSerializer(serializers.ModelSerializer):
         model = Cat
         fields = ('id', 'name', 'color')
 
+
 class CatSerializer(serializers.ModelSerializer):
     # owner = serializers.PrimaryKeyRelatedField(read_only=True)
     achievements = AchievementSerializer(many=True, required=False)

@@ -2,7 +2,8 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Cat, Owner, Achievement
-from .serializers import CatSerializer, OwnerSerializer, AchievementSerializer
+from .serializers import OwnerSerializer, AchievementSerializer
+from .serializers import CatSerializer, CatListSerializer
 
 
 class CatViewSet(viewsets.ModelViewSet):
@@ -14,6 +15,15 @@ class CatViewSet(viewsets.ModelViewSet):
         cats = Cat.objects.filter(color='Black')[:5]
         serializer = self.get_serializer(cats, many=True)
         return Response(serializer.data)
+
+
+    def get_serializer_class(self):
+        # Если запрошенное действие (action) — получение списка объектов ('list')
+        if self.action == 'list':
+            # ...то применяем CatListSerializer
+            return CatListSerializer
+        # А если запрошенное действие — не 'list', применяем CatSerializer
+        return CatSerializer
 
 
 class OwnerViewSet(viewsets.ModelViewSet):
